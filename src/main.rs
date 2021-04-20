@@ -2,11 +2,15 @@ use serenity::async_trait;
 use serenity::client::{Client, EventHandler};
 use serenity::framework::standard::{macros::group, StandardFramework};
 
+use std::fs::File;
+use std::io::{BufRead, BufReader};
+
 mod commands;
 
 use commands::math::*;
-
-const TOKEN: &str = "ODI3MzQ5MTc1NTE4NjI1ODIy.YGZu9g._KQJQQh7q6vnDZLLtWSnD35WHas";
+//const token_file: &File = &File::open("token.txt").unwrap();
+//const TOKEN: &str = "Test";
+//BufReader::new(file).lines().next()
 
 #[group]
 #[commands(multiply, add)]
@@ -19,6 +23,10 @@ impl EventHandler for Handler {}
 
 #[tokio::main]
 async fn main() {
+    let token_file = File::open("token.txt").unwrap();
+    println!("{:?}", BufReader::new(token_file).lines().next());
+    const TOKEN: &str = "test";
+
     let framework = StandardFramework::new()
         .configure(|c| c.prefix("~")) // set the bot's prefix to "~"
         .group(&GENERAL_GROUP);
