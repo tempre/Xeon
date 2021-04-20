@@ -8,9 +8,6 @@ use std::io::{BufRead, BufReader};
 mod commands;
 
 use commands::math::*;
-//const token_file: &File = &File::open("token.txt").unwrap();
-//const TOKEN: &str = "Test";
-//BufReader::new(file).lines().next()
 
 #[group]
 #[commands(multiply, add)]
@@ -23,16 +20,15 @@ impl EventHandler for Handler {}
 
 #[tokio::main]
 async fn main() {
-    let token_file = File::open("token.txt").unwrap();
-    println!("{:?}", BufReader::new(token_file).lines().next());
-    const TOKEN: &str = "test";
+    let token_file = File::open("./src/token.txt").unwrap();
+    let token = BufReader::new(token_file).lines().next().unwrap().unwrap();
 
     let framework = StandardFramework::new()
         .configure(|c| c.prefix("~")) // set the bot's prefix to "~"
         .group(&GENERAL_GROUP);
 
     // Login with a bot token from the environment
-    let mut client = Client::builder(TOKEN)
+    let mut client = Client::builder(token)
         .event_handler(Handler)
         .framework(framework)
         .await
